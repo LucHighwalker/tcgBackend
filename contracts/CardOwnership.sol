@@ -2,8 +2,11 @@ pragma solidity ^0.5.8;
 
 import "./CardHelper.sol";
 import "./ERC721.sol";
+import "./SafeMath.sol";
 
 contract CardOwnership is CardHelper, ERC721 {
+
+  using SafeMath for uint256;
 
   mapping (uint => address) cardApprovals;
 
@@ -16,8 +19,8 @@ contract CardOwnership is CardHelper, ERC721 {
   }
 
   function _transfer(address _from, address _to, uint256 _tokenId) private {
-    ownerCardCount[_to]++;
-    ownerCardCount[_from]--;
+    ownerCardCount[_to] = ownerCardCount[_to].add(1);
+    ownerCardCount[_from] = ownerCardCount[_to].sub(1);
     cardToOwner[_tokenId] = _to;
     emit Transfer(_from, _to, _tokenId);
   }
