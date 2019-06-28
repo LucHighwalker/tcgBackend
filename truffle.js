@@ -6,8 +6,8 @@ const HDWalletProvider = require('truffle-hdwallet-provider');
 module.exports = {
   networks: {
     development: {
-      host: process.env.ETHEREUM_NETWORK_HOST || 'ethereum',
-      port: '8545',
+      host: '127.0.0.1', // Localhost (default: none)
+      port: 8545, // Standard Ethereum port (default: none)
       network_id: '*',
     },
     ropsten: {
@@ -26,7 +26,7 @@ module.exports = {
 
   compilers: {
     solc: {
-      version: '0.5.7',
+      version: '^0.5.8',
     },
   },
 
@@ -37,5 +37,4 @@ module.exports = {
       configFile: './mocha-smart-contracts-config.json',
     },
   },
-
 };
