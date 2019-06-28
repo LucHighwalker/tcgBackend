@@ -13,15 +13,6 @@ contract('CardFactory', accounts => {
         result,
         {
           event: 'NewCard',
-          args: {
-            0: [BN],
-            1: 'something',
-            2: [BN],
-            __length__: 3,
-            cardId: [BN],
-            name: 'something',
-            dna: [BN],
-          },
         },
         'The event is emitted'
       );

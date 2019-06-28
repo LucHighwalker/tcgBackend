@@ -1,6 +1,8 @@
 pragma solidity ^0.5.8;
 
-contract CardFactory {
+import "./Ownable.sol";
+
+contract CardFactory is Ownable {
 
     event NewCard(uint cardId, string name, uint dna);
 
