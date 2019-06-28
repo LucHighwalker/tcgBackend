@@ -2,6 +2,6 @@
 let Application = artifacts.require('./Application.sol');
 let Storage = artifacts.require('./Storage.sol');
 
-module.exports = function(deployer) {
+module.exports = (deployer) => {
   deployer.deploy(Application, Storage.address);
 };
