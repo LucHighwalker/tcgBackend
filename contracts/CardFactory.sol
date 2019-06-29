@@ -17,9 +17,10 @@ contract CardFactory is Ownable {
     struct Card {
         string name;
         uint dna;
-        uint attack;
-        uint defense;
-        uint health;
+        uint32 attack;
+        uint32 defense;
+        uint32 health;
+        uint32[5] effects;
     }
 
     Card[] public cards;
@@ -28,7 +29,7 @@ contract CardFactory is Ownable {
     mapping (address => uint) ownerCardCount;
 
     function _createCard(string memory _name, uint _dna) private {
-        Card memory card = Card(_name, _dna, 100, 100, 100);
+        Card memory card = Card(_name, _dna, 100, 100, 100, [uint32(0), 0, 0, 0, 0]);
         uint id = cards.push(card) - 1;
         cardToOwner[id] = msg.sender;
         ownerCardCount[msg.sender] = ownerCardCount[msg.sender].add(1);
