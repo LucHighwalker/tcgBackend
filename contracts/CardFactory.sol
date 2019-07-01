@@ -9,7 +9,8 @@ contract CardFactory is Ownable {
     using SafeMath32 for uint32;
     using SafeMath16 for uint16;
 
-    event NewCard(uint cardId, string name, uint dna);
+    event NewCard(uint cardId, string name, uint dna, uint32 attack, uint32 defense, uint32 health);
+    event FusedCard(uint cardId, string name, uint dna, uint32 attack, uint32 defense, uint32 health);
 
     uint dnaDigits = 16;
     uint dnaModulus = 10 ** dnaDigits;
@@ -33,7 +34,7 @@ contract CardFactory is Ownable {
         uint id = cards.push(card) - 1;
         cardToOwner[id] = msg.sender;
         ownerCardCount[msg.sender] = ownerCardCount[msg.sender].add(1);
-        emit NewCard(id, _name, _dna);
+        emit NewCard(id, _name, _dna, card.attack, card.defense, card.health);
     }
 
     function _generateRandomDna(string memory _str) private view returns (uint) {
@@ -42,7 +43,6 @@ contract CardFactory is Ownable {
     }
 
     function createRandomCard(string memory _name) public {
-        require(ownerCardCount[msg.sender] == 0, 'Owner card count not zero.');
         uint randDna = _generateRandomDna(_name);
         _createCard(_name, randDna);
     }

@@ -20,19 +20,27 @@ contract CardFuser is CardFactory {
     _;
   }
 
-  function fuseCards(uint _card1, uint _card2) public onlyOwnerOfMultiple([_card1, _card2]) {
+  function fuseCards(uint _card1, uint _card2, uint32 _card1GeneStrength) public onlyOwnerOfMultiple([_card1, _card2]) {
     Card memory card1 = cards[_card1];
     Card memory card2 = cards[_card2];
 
     uint newDna = card1.dna.add(card2.dna);
-    uint32 newAttack = (card1.attack * uint32(0.75)).add(card2.attack * uint32(0.25));
-    uint32 newDefense = (card1.defense * uint32(0.75)).add(card2.defense * uint32(0.25));
-    uint32 newHealth = (card1.health * uint32(0.75)).add(card2.health * uint32(0.25));
+    uint32 newAttack = _addPercentiles(card1.attack, card2.attack, _card1GeneStrength);
+    uint32 newDefense = _addPercentiles(card1.defense, card2.defense, _card1GeneStrength);
+    uint32 newHealth = _addPercentiles(card1.health, card2.health, _card1GeneStrength);
 
     Card memory card = Card(card1.name, newDna, newAttack, newDefense, newHealth, [uint32(0), 0, 0, 0, 0]);
     uint id = cards.push(card) - 1;
     cardToOwner[id] = msg.sender;
     ownerCardCount[msg.sender] = ownerCardCount[msg.sender].add(1);
-    emit NewCard(id, card.name, card.dna);
+    emit FusedCard(id, card.name, card.dna, card.attack, card.defense, card.health);
+  }
+
+  function _addPercentiles(uint32 _val1, uint32 _val2, uint32 _perc1) private pure returns (uint32) {
+    uint32 _perc2 = uint32(100).sub(_perc1);
+    uint32 val1 = _val1.mul(100).mul(_perc1);
+    uint32 val2 = _val2.mul(100).mul(_perc2);
+    uint32 result = val1.add(val2);
+    return result.div(100);
   }
 }
